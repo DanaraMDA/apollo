@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+Copyright (c) 2018 by allyru (http://jsbin.com/zavizej/43/edit)
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Квест23</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.js"></script>
+  <script>
+    mocha.setup('bdd');
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/2.0.0/chai.js"></script>
+  <script>
+    var assert = chai.assert;
+  </script>
+  </head>
+<body>
+  
+  <script>
+  var Map = function(size)
+{
+  
+    this.index = 0
+    if (size === undefined)
+        this.size = 10
+    else 
+        this.size = size
+    this.arr = Array(this.size)
+    for (var i = 0; i < this.size; i++)
+        this.arr[i] = null
+    var Node = function(key, value)
+    {
+        this.key = key
+        this.value = value
+        this.next = null
+    }
+    function hashCode(key, size)
+    {
+        if (typeof key == 'number')
+            return key % size
+        if (typeof key == 'string')
+        {
+            var code = 0
+            for (var i = 0; i < key.length; i++)
+                code += key.charCodeAt(i)
+            return code % size
+        }
+    }
+    this.Insert = function(key, value)
+    {
+        var code = hashCode(key, this.size)
+        if (this.arr[code] == null)
+            this.arr[code] = new Node(key,value)
+        else
+        {
+            var helpNode = this.arr[code]
+            while (helpNode.next)
+                helpNode = helpNode.next
+            helpNode.next = new Node(key, value)
+        }
+        this.index++;
+    }
+    this.Get = function(key)
+    {
+        var code = hashCode(key, this.size)
+        if (this.arr[code] == null)
+            return null
+        var helpNode = this.arr[code]
+        while (helpNode != null)
+        {
+            if (helpNode.key == key)
+                return helpNode.value
+            helpNode = helpNode.next
+        }
+        return null
+    }
+   
+}
+     var List = function() 
+{
+	var Node = function(value)
+	{
+		this.value = value
+		this.next = null
+	}
+	this.first = null, this.last = null
+	List.prototype.push = function(value) 
+	{
+		var newNode = new Node(value)
+		if (this.first == null)
+			this.first = this.last = newNode
+		else
+		{
+			this.last.next = newNode
+			this.last = newNode
+		}
+	}
+	List.prototype.pop = function()
+	{
+		var node = this.first.next
+		while (node.next != last)
+			node = node.next
+            
+		var value = this.last
+		this.last = node
+		return value
+	}
+}
+  </script>
+  
+  <script>
+  var x = new Map()
+    
+describe('Hash', function() {
+  
+    it('Добавить элементы', function() {
+        x.Insert(21,'1');
+        x.Insert('2',2);
+        x.Insert(147,'1');
+        x.Insert(43,'UU');
+        x.Insert('ABС', 5);
+        assert.equal(x.Get(21),'1');
+        assert.equal(x.Get('2'),2);
+        assert.equal(x.Get('ABС'),5);
+        assert.equal(x.Get(147),'1');
+        assert.equal(x.Get(43),'UU');
+    });
+  
+    it('Добавить элементы с коллизией', function() {
+        x.Insert(11,'T');
+        x.Insert(5,'Ee');
+        x.Insert(25,'Er');
+        assert.equal(x.Get(11),'T');
+        assert.equal(x.Get(5),'Ee');
+         assert.equal(x.Get(25),'Er');
+    });
+});
+  </script>
+  <!-- в элементе с id="mocha" будут результаты тестов -->
+  <div id="mocha"></div>
+
+  <!-- запустить тесты! -->
+  <script>
+    mocha.run();
+  </script>
+<script id="jsbin-javascript">
+</script>
+</body>
+</html>
